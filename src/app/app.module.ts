@@ -17,6 +17,7 @@ import { MoviesListItemComponent } from './components/movies-list-item/movies-li
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 import { reducers, metaReducers } from './shared/state';
+import { AppEffects } from './app.effects';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { reducers, metaReducers } from './shared/state';
     BrowserAnimationsModule,
     HttpClientModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AppEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     MatButtonModule,
     MatCardModule,

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Movie } from '../../shared/models';
-import { MoviesService } from '../../services/movies.service';
+import * as fromRoot from '../../shared/state';
+import * as MovieActions from '../../actions/movie.actions';
 
 @Component({
   selector: 'search-movies-page',
@@ -9,21 +10,18 @@ import { MoviesService } from '../../services/movies.service';
     <search-movies-box (search)="onSearch($event)"></search-movies-box>
 
     <movies-list
-      [movies]="movies"
+      [movies]="movies$ | async"
       (favoriteMovie)="onFavoriteMovie($event)">
     </movies-list>
   `
 })
 export class SearchMoviesPageComponent {
-  movies: Movie[] = [];
+  movies$ = this.store.select(fromRoot.selectMovies);
 
-  constructor(private moviesService: MoviesService) {}
+  constructor(private store: Store<fromRoot.State>) {}
 
   onSearch(searchTerm: string) {
-    this.moviesService.findMovies(searchTerm)
-      .subscribe(movies => {
-        this.movies = movies;
-      });
+    this.store.dispatch(MovieActions.moviesSearch({ searchTerm }));
   }
 
   onFavoriteMovie($event: Movie) {
